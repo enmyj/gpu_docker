@@ -14,7 +14,7 @@ RUN apt-get install -y --no-install-recommends \
 	liblzma-dev \
 	libpcre3-dev \
 	liblzma-dev \
-	zlib1g-dev
+	zlib1g-dev \
 	default-jre \
 	default-jdk
 
@@ -59,6 +59,9 @@ RUN MAKE="make -j 8" Rscript /install.r
 # busts our python3 symlink. some bullshit
 RUN rm /usr/bin/python \
    && ln -s /usr/bin/python3 /usr/bin/python
+
+# don't keep sessions between runs of docker image
+RUN echo "session-timeout-minutes=0" >> /etc/rstudio/rsession.conf
 
 EXPOSE 8787
 
