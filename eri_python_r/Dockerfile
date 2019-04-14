@@ -1,12 +1,24 @@
 FROM eri_python:latest
 
+FROM rocker/rstudio:latest
+
 # update the cran deb repo source
+RUN apt-get update && apt-get install -y gnupg2
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
 RUN echo deb http://cran.revolutionanalytics.com/bin/linux/ubuntu xenial/ > /etc/apt/sources.list.d/cran.list
 
-RUN apt-get update
-RUN apt-get install -y --no-install-recommends default-jre default-jdk
-RUN apt-get install -y --no-install-recommends r-base r-base-dev
+# java stuff
+RUN apt-get install -y --no-install-recommends \
+	libicu-dev \
+	libbz2-dev \
+	liblzma-dev \
+	libpcre3-dev \
+	liblzma-dev \
+	zlib1g-dev
+	default-jre \
+	default-jdk
+
+# other base linux stuff
 RUN apt-get install -y --no-install-recommends \
     r-cran-boot \
     r-cran-class \
@@ -43,30 +55,10 @@ COPY install.r /
 #  o
 RUN MAKE="make -j 8" Rscript /install.r
 
-# rstudio install
-RUN apt-get install -y --no-install-recommends gdebi-core wget \
-    && wget -q https://download2.rstudio.org/rstudio-server-1.1.453-amd64.deb \
-    && gdebi -n rstudio-server-1.1.453-amd64.deb
-
-# setting up a stupid fucking user
-RUN useradd rstudio \
-    && echo "rstudio:rstudio" | chpasswd \
-    && mkdir -p /home/rstudio \
-    && chown rstudio:rstudio /home/rstudio \
-    && mkdir -p /home/rstudio/.rstudio/monitored/user-settings \
-    && echo 'alwaysSaveHistory="0"' > /home/rstudio/.rstudio/monitored/user-settings/user-settings \
-    && echo 'loadRData="0"' >> /home/rstudio/.rstudio/monitored/user-settings/user-settings \
-    && echo 'nsaveAction="0"' >> /home/rstudio/.rstudio/monitored/user-settings/user-settings \
-    && chown -R rstudio:rstudio /home/rstudio/.rstudio
-
 # install of r-cran-foreign up above installs python2.7 as a dependency, so it
 # busts our python3 symlink. some bullshit
 RUN rm /usr/bin/python \
-    && ln -s /usr/bin/python3 /usr/bin/python
+   && ln -s /usr/bin/python3 /usr/bin/python
 
 EXPOSE 8787
 
-COPY starthack.sh /
-RUN chmod +x /starthack.sh
-
-CMD ["/starthack.sh"]
