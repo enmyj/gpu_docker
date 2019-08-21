@@ -1,0 +1,14 @@
+
+jobs:
+  include:
+    - stage: build docker image
+      script:
+        - docker build -t eri_dev eri_dev/
+        - docker build -t eri_dev_p_r eri_dev_p_r/
+        - docker build -t eri_python eri_python/
+        - docker build -t eri_python_r eri_python_r/
+        - docker images
+        # - docker push XXXX/eri_dev
+        # - docker push XXXX/eri_dev_p_r
+        # - docker push XXXX/eri_python
+        # - docker push XXXX/eri_python_r
