@@ -108,9 +108,9 @@ RUN python3 -m pip install GDAL==$(gdal-config --version) --global-option=build_
 
 RUN python3 -m pip --no-cache-dir install jupyterlab ipywidgets ipympl \
 #     && jupyter nbextension enable --py --sys-prefix widgetsnbextension \
-    && jupyter labextension install @jupyter-widgets/jupyterlab-manager \
-    && jupyter labextension install @jupyterlab/plotly-extension \
-    && jupyter labextension install jupyter-matplotlib
+#     && jupyter labextension install @jupyter-widgets/jupyterlab-manager \
+#     && jupyter labextension install @jupyterlab/plotly-extension \
+#     && jupyter labextension install jupyter-matplotlib
 
 # pytorch is also special, install from a wheel on their webpage
 RUN pip --no-cache-dir install torch==1.2.0 torchvision
