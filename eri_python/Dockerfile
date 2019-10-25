@@ -106,11 +106,11 @@ ENV CPLUS_INCLUDE_PATH /usr/include/gdal
 ENV C_INCLUDE_PATH /usr/include/gdal
 RUN python3 -m pip install GDAL==$(gdal-config --version) --global-option=build_ext --global-option="-I/usr/include/gdal"  
 
-RUN python3 -m pip --no-cache-dir install jupyterlab ipywidgets ipympl \
-#     && jupyter nbextension enable --py --sys-prefix widgetsnbextension \
-#     && jupyter labextension install @jupyter-widgets/jupyterlab-manager \
-#     && jupyter labextension install @jupyterlab/plotly-extension \
-#     && jupyter labextension install jupyter-matplotlib
+# RUN python3 -m pip --no-cache-dir install jupyterlab ipywidgets ipympl \
+# #     && jupyter nbextension enable --py --sys-prefix widgetsnbextension \
+# #     && jupyter labextension install @jupyter-widgets/jupyterlab-manager \
+# #     && jupyter labextension install @jupyterlab/plotly-extension \
+# #     && jupyter labextension install jupyter-matplotlib
 
 # pytorch is also special, install from a wheel on their webpage
 RUN pip --no-cache-dir install torch==1.2.0 torchvision
